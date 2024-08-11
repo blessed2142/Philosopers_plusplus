@@ -47,7 +47,7 @@ void OptionParser::init()
           must_eat_set_ = true;
      }
 
-     if ( options_.philosophers <= 0 ||
+     if ( options_.philosophers <= 1 ||
           options_.time_to_die <= 0 ||
           options_.time_to_eat <= 0 ||
           options_.time_to_sleep <= 0 || 

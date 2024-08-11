@@ -1,0 +1,34 @@
+#ifndef WAITER_H
+#define WAITER_H
+
+#include <OptionsParser.h>
+#include <vector>
+#include <Philo.h>
+#include <thread>
+
+class Waiter
+{
+public:
+     Waiter( const Options& other );
+
+     void CreatePhilos();
+     void BeginSumulation();
+     void ObserveTable();
+     void FeedChecker( bool& all_feed );
+private:
+     Options options_;
+     std::vector<Philo> philos_;
+
+     // std::mutex print_mutex_;
+     std::timed_mutex print_mutex_;
+     std::vector<std::mutex> forks_;
+
+     std::vector<std::thread> threads_;
+
+     Waiter( const Waiter&);
+     Waiter &operator=( const Waiter& );
+
+
+};
+
+#endif
