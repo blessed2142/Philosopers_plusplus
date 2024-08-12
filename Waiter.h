@@ -21,7 +21,7 @@ private:
 
      // std::mutex print_mutex_;
      std::timed_mutex print_mutex_;
-     std::vector<std::mutex> forks_;
+     std::vector<std::mutex> fork_mutexes_;
 
      std::vector<std::thread> threads_;
 

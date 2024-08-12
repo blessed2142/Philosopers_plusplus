@@ -5,7 +5,7 @@ Waiter::Waiter( const Options& options ) : options_( options )
 {
      std::vector<std::mutex> for_swap( options_.philosophers );
 
-     forks_.swap( for_swap );
+     fork_mutexes_.swap( for_swap );
 }
 
 void Waiter::CreatePhilos()
@@ -16,10 +16,10 @@ void Waiter::CreatePhilos()
           int philoNumber = i + 1;
           if ( philoNumber == options_.philosophers )
           {
-               philos_.emplace_back( philoNumber, options_, print_mutex_, forks_[i], forks_[ 0 ] );
+               philos_.emplace_back( philoNumber, options_, print_mutex_, fork_mutexes_[i], fork_mutexes_[ 0 ] );
                break;
           }
-          philos_.emplace_back( philoNumber, options_, print_mutex_, forks_[ i ], forks_[ i + 1 ] );
+          philos_.emplace_back( philoNumber, options_, print_mutex_, fork_mutexes_[ i ], fork_mutexes_[ i + 1 ] );
      }
 }
 
