@@ -10,13 +10,14 @@ Waiter::Waiter( const Options& options ) : options_( options )
 
 void Waiter::CreatePhilos()
 {
-
+     const int first_element = 0;
+     int philoNumber = 0;
      for ( int i = 0; i < options_.philosophers; ++i )
      {
-          int philoNumber = i + 1;
+          philoNumber = i + 1;
           if ( philoNumber == options_.philosophers )
           {
-               philos_.emplace_back( philoNumber, options_, print_mutex_, fork_mutexes_[i], fork_mutexes_[ 0 ] );
+               philos_.emplace_back( philoNumber, options_, print_mutex_, fork_mutexes_[i], fork_mutexes_[ first_element ] );
                break;
           }
           philos_.emplace_back( philoNumber, options_, print_mutex_, fork_mutexes_[ i ], fork_mutexes_[ i + 1 ] );
