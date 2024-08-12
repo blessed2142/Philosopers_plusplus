@@ -97,14 +97,16 @@ void Waiter::ObserveTable()
      
           philos_[i].Print( "died" );
      }
-     std::lock_guard<std::timed_mutex> lkt( print_mutex_ );
-
-
-     for ( auto& thread : threads_ )
      {
-          if ( thread.joinable() )
+          std::lock_guard<std::timed_mutex> lkt( print_mutex_ );
+
+
+          for ( auto& thread : threads_ )
           {
-               thread.join();
+               if ( thread.joinable() )
+               {
+                    thread.join();
+               }
           }
      }
 }
