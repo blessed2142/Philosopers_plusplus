@@ -26,7 +26,6 @@ void Waiter::CreatePhilos()
 
 void Waiter::BeginSumulation()
 {
-//  std::thread t(&X::do_lengthy_work, &my_x);
      // Сначала "сажаем за стол" нечетных философов
      std::chrono::high_resolution_clock::time_point start_time = std::chrono::high_resolution_clock::now();
      for ( auto& philo : philos_ )
@@ -100,7 +99,6 @@ void Waiter::ObserveTable()
      }
      {
           std::lock_guard<std::timed_mutex> lkt( print_mutex_ );
-
 
           for ( auto& thread : threads_ )
           {
