@@ -38,12 +38,9 @@ void Philo::Eat()
      {
           return ;
      }
-     
-     if ( own_number_ % 2 == 1 )
+
+     auto routine = [&]()
      {
-          std::lock( right_fork_, left_fork_ );
-          std::lock_guard<std::mutex> lk1( right_fork_, std::adopt_lock );
-          std::lock_guard<std::mutex> lk2( left_fork_, std::adopt_lock );
           Print( "has taken a fork" );
           Print( "is eating" );
           last_meal_ = std::chrono::high_resolution_clock::now();
@@ -55,23 +52,21 @@ void Philo::Eat()
                Stop();
                feed_up_ = true;
           }
+     };
+
+     if ( own_number_ % 2 == 1 )
+     {
+          std::lock( right_fork_, left_fork_ );
+          std::lock_guard<std::mutex> lk1( right_fork_, std::adopt_lock );
+          std::lock_guard<std::mutex> lk2( left_fork_, std::adopt_lock );
+          routine();
      }
      else
      {
           std::lock( left_fork_, right_fork_ );
           std::lock_guard<std::mutex> lk1( left_fork_, std::adopt_lock );
           std::lock_guard<std::mutex> lk2( right_fork_, std::adopt_lock );
-          Print( "has taken a fork" );
-          Print( "is eating" );
-          last_meal_ = std::chrono::high_resolution_clock::now();
-          std::this_thread::sleep_until( std::chrono::round<std::chrono::milliseconds>(
-               std::chrono::high_resolution_clock::now() + std::chrono::milliseconds( options_.time_to_eat ) )  );
-          ++eated_;
-          if ( eated_ == options_.must_eat )
-          {
-               Stop();
-               feed_up_ = true;
-          }
+          routine();
      }
 }
 
