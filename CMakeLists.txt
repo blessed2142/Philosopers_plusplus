@@ -6,6 +6,6 @@ set(SRC main.cpp OptionsParser.cpp Philo.cpp Waiter.cpp )
 
 include_directories( . )
 add_executable(philosophers ${SRC})
-add_compile_options( -O0 -g )
+add_compile_options( -O0 -g -std=c++17 )
 
 target_link_libraries(philosophers pthread)

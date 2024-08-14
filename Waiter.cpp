@@ -54,7 +54,7 @@ void Waiter::FeedChecker( bool& all_feed )
 {
      for ( ; ; )
      {
-          if ( std::all_of( philos_.begin(), philos_.end(), []( Philo p ){ return p.isFeadUp(); } ) )
+          if ( std::all_of( philos_.begin(), philos_.end(), []( Philo& p ){ return p.isFeadUp(); } ) )
           {
                all_feed = true;
                return ;

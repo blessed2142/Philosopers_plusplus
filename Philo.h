@@ -3,6 +3,7 @@
 #include <mutex>
 #include <OptionsParser.h>
 #include <chrono>
+#include <shared_mutex>
 
 class Philo
 {
@@ -22,9 +23,10 @@ public:
      void Stop();
      bool isFeadUp() const;
 
-     Philo( const Philo& ) = default;
-     Philo &operator=( const Philo& ) = default;
-     Philo( Philo&& ) = default;
+     Philo( const Philo& ) = delete;
+     Philo &operator=( const Philo& ) = delete;
+     Philo( Philo&& ) = delete;
+     Philo &operator=( Philo&& ) = delete;
 private:
 
      int       own_number_;
@@ -41,6 +43,8 @@ private:
      std::timed_mutex& print_mutex_;
      std::mutex& left_fork_;
      std::mutex& right_fork_;
+     
+     std::shared_mutex action_mutex_;
 
 
      void Eat();

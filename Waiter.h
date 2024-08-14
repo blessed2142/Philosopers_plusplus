@@ -5,6 +5,7 @@
 #include <vector>
 #include <Philo.h>
 #include <thread>
+#include <deque>
 
 class Waiter
 {
@@ -17,7 +18,7 @@ public:
      void FeedChecker( bool& all_feed );
 private:
      Options options_;
-     std::vector<Philo> philos_;
+     std::deque<Philo> philos_;
 
      // std::mutex print_mutex_;
      std::timed_mutex print_mutex_;

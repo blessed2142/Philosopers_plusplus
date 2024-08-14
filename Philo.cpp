@@ -43,7 +43,10 @@ void Philo::Eat()
      {
           Print( "has taken a fork" );
           Print( "is eating" );
-          last_meal_ = std::chrono::high_resolution_clock::now();
+          {
+               std::unique_lock lock( action_mutex_ );
+               last_meal_ = std::chrono::high_resolution_clock::now();
+          }
           std::this_thread::sleep_until( std::chrono::round<std::chrono::milliseconds>(
                std::chrono::high_resolution_clock::now() + std::chrono::milliseconds( options_.time_to_eat ) )  );
           ++eated_;
@@ -94,6 +97,7 @@ void Philo::Routine()
 
 bool Philo::IsDead()
 {
+     std::shared_lock lock( action_mutex_ );
      return last_meal_ + std::chrono::milliseconds( options_.time_to_die ) < 
      std::chrono::high_resolution_clock::now();
 }
