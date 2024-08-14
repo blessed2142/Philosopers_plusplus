@@ -21,7 +21,7 @@ public:
      void SetStartTime( const std::chrono::high_resolution_clock::time_point& start_time );
      int  GetOwnNumber() const;
      void Stop();
-     bool isFeadUp() const;
+     bool isFeadUp();
 
      Philo( const Philo& ) = delete;
      Philo &operator=( const Philo& ) = delete;

@@ -135,8 +135,8 @@ void Philo::Stop()
      philo_work_ = false;
 }
 
-bool Philo::isFeadUp() const
+bool Philo::isFeadUp()
 {
-     // std::shared
+     std::shared_lock lock( feed_up_mutex_ );
      return feed_up_;
 }
