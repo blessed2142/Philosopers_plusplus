@@ -46,6 +46,7 @@ private:
      
      std::shared_mutex last_meal_mutex_;
      std::shared_mutex philo_work_mutex_;
+     std::shared_mutex feed_up_mutex_;
 
 
      void Eat();

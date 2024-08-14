@@ -56,7 +56,10 @@ void Philo::Eat()
           if ( eated_ == options_.must_eat )
           {
                Stop();
-               feed_up_ = true;
+               {
+                    std::unique_lock lock( feed_up_mutex_ );
+                    feed_up_ = true;
+               }
           }
      };
 
@@ -134,5 +137,6 @@ void Philo::Stop()
 
 bool Philo::isFeadUp() const
 {
+     // std::shared
      return feed_up_;
 }
