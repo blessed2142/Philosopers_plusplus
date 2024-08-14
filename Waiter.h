@@ -15,7 +15,7 @@ public:
      void CreatePhilos();
      void BeginSumulation();
      void ObserveTable();
-     void FeedChecker( bool& all_feed );
+     void FeedChecker( bool& all_feed, std::mutex& all_feed_mutex  );
 private:
      Options options_;
      std::deque<Philo> philos_;

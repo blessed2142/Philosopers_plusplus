@@ -50,12 +50,13 @@ void Waiter::BeginSumulation()
 }
 
 // void Waiter::FeedChecker( bool& all_feed, std::vector<Philo>& philos )
-void Waiter::FeedChecker( bool& all_feed )
+void Waiter::FeedChecker( bool& all_feed, std::mutex& all_feed_mutex )
 {
      for ( ; ; )
      {
           if ( std::all_of( philos_.begin(), philos_.end(), []( Philo& p ){ return p.isFeadUp(); } ) )
           {
+               std::lock_guard<std::mutex> lock( all_feed_mutex );
                all_feed = true;
                return ;
           }
@@ -67,15 +68,23 @@ void Waiter::ObserveTable()
 {
      int i = 0;
      bool all_feed = false;
+     std::mutex all_feed_mutex;
      if ( options_.must_eat > 0 )
      {
-          std::thread feedThread( &Waiter::FeedChecker, this, std::ref( all_feed ) );
-          // std::thread feedThread( FeedChecker, std::ref( all_feed ), std::ref( philos_ ) );
+          std::thread feedThread( &Waiter::FeedChecker, this, std::ref( all_feed ), std::ref( all_feed_mutex ) );
           feedThread.detach();
      }
 
-     while ( !philos_[i].IsDead() && !all_feed )
+     while ( !philos_[i].IsDead() )
      {
+          if ( options_.must_eat > 0 )
+          {
+               std::lock_guard<std::mutex> lock( all_feed_mutex );
+               if ( all_feed )
+               {
+                    break;
+               }
+          }
           if ( i + 1 == options_.philosophers )
           {
                i = 0;
