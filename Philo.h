@@ -44,7 +44,8 @@ private:
      std::mutex& left_fork_;
      std::mutex& right_fork_;
      
-     std::shared_mutex action_mutex_;
+     std::shared_mutex last_meal_mutex_;
+     std::shared_mutex philo_work_mutex_;
 
 
      void Eat();

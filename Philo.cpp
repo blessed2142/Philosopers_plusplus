@@ -34,9 +34,12 @@ void Philo::Print( const std::string& message )
 
 void Philo::Eat()
 {
-     if ( !philo_work_ )
      {
-          return ;
+          std::shared_lock lock( philo_work_mutex_ );
+          if ( !philo_work_ )
+          {
+               return ;
+          }
      }
 
      auto routine = [&]()
@@ -44,7 +47,7 @@ void Philo::Eat()
           Print( "has taken a fork" );
           Print( "is eating" );
           {
-               std::unique_lock lock( action_mutex_ );
+               std::unique_lock lock( last_meal_mutex_ );
                last_meal_ = std::chrono::high_resolution_clock::now();
           }
           std::this_thread::sleep_until( std::chrono::round<std::chrono::milliseconds>(
@@ -75,9 +78,12 @@ void Philo::Eat()
 
 void Philo::SleepThink()
 {
-     if ( !philo_work_ )
      {
-          return ;
+          std::shared_lock lock( philo_work_mutex_ );
+          if ( !philo_work_ )
+          {
+               return ;
+          }
      }
 
      Print( "is sleeping" );
@@ -88,8 +94,15 @@ void Philo::SleepThink()
 
 void Philo::Routine()
 {
-     for ( ; philo_work_ ; )
+     for ( ; ; )
      {
+          {
+               std::shared_lock lock( philo_work_mutex_ );
+               if ( !philo_work_ )
+               {
+                    return ;
+               }
+          }
           Eat();
           SleepThink();
      }
@@ -97,7 +110,7 @@ void Philo::Routine()
 
 bool Philo::IsDead()
 {
-     std::shared_lock lock( action_mutex_ );
+     std::shared_lock lock( last_meal_mutex_ );
      return last_meal_ + std::chrono::milliseconds( options_.time_to_die ) < 
      std::chrono::high_resolution_clock::now();
 }
@@ -115,6 +128,7 @@ int Philo::GetOwnNumber() const
 
 void Philo::Stop()
 {
+     std::unique_lock lock( philo_work_mutex_ );
      philo_work_ = false;
 }
 
